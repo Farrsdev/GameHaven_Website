@@ -370,17 +370,19 @@ function debounce(func, wait) {
 
 async function loadGames() {
     showLoadingState();
-    
+
     try {
         const response = await fetch('/api/games');
-        games = await response.json();
-        
+        const result = await response.json();
+
+        games = result.data; // ✅ AMBIL ARRAY-NYA, BUKAN OBJEK LUARNYA
+
         updateStatistics();
         filterAndSortGames();
         updateCategoriesFilter();
         renderGamesTable();
         updatePagination();
-        
+
     } catch (error) {
         console.error('Error loading games:', error);
         showError('Failed to load games. Please try again.');

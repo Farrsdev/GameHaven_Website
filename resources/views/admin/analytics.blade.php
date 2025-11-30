@@ -227,31 +227,38 @@ function setupEventListeners() {
         });
     });
 }
-
 async function loadAnalyticsData() {
     showLoadingState();
     
     try {
-        // In a real implementation, you would fetch data from your API
-        // For now, we'll use the existing dashboard data and enhance it
-        
         const [transactionsResponse, gamesResponse, usersResponse] = await Promise.all([
-            fetch('/api/transactions').catch(() => ({ json: () => [] })),
-            fetch('/api/games').catch(() => ({ json: () => [] })),
-            fetch('/api/users').catch(() => ({ json: () => [] }))
+            fetch('/api/transactions'),
+            fetch('/api/games'),
+            fetch('/api/users')
         ]);
 
-        const transactions = await transactionsResponse.json();
-        const games = await gamesResponse.json();
-        const users = await usersResponse.json();
+        const transactionsRaw = await transactionsResponse.json();
+        const gamesRaw = await gamesResponse.json();
+        const usersRaw = await usersResponse.json();
 
-        // Calculate analytics metrics
+        // ✅ PENTING: Extract array dari paginate response
+        const transactions = Array.isArray(transactionsRaw)
+            ? transactionsRaw
+            : transactionsRaw.data || [];
+
+        const games = gamesRaw.data || [];
+        const users = usersRaw.data || [];
+
+        console.log('Transactions:', transactions);
+        console.log('Games:', games);
+        console.log('Users:', users);
+
         calculateMetrics(transactions, games, users);
         renderCharts(transactions, games);
         renderTopProducts(transactions, games);
         renderRecentActivity(transactions);
         renderDailyPerformance(transactions);
-        
+
     } catch (error) {
         console.error('Error loading analytics data:', error);
         showError('Failed to load analytics data. Please try again.');
