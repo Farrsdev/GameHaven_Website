@@ -3,91 +3,29 @@
 @section('title', 'Store - GameHaven')
 
 @section('content')
-<div class="store-container">
-    <!-- Hero Section -->
-    <section class="store-hero">
-        <div class="hero-content">
-            <h1 class="hero-title">Game Store</h1>
-            <p class="hero-subtitle">Purchase amazing games and expand your collection</p>
+<div class="store-page">
+    <!-- Header -->
+    <div class="page-header">
+        <h1>Store</h1>
+        <p>Add games to your collection</p>
+    </div>
+
+    <!-- Cart Summary -->
+    <div class="cart-summary" id="cartSummary">
+        <div class="cart-info">
+            <i class="fas fa-shopping-cart"></i>
+            <span id="cartCount">0 items</span>
+            <span id="cartTotal">Rp 0</span>
         </div>
-    </section>
+        <button class="btn primary" id="checkoutBtn" disabled>Checkout</button>
+    </div>
 
-    <!-- Main Content -->
-    <div class="store-main">
-        <!-- Cart Section -->
-        <div class="cart-section" id="cartSection">
-            <div class="cart-header">
-                <h2 class="cart-title">Your Cart</h2>
-                <div class="cart-actions">
-                    <button class="btn btn-outline" id="clearCartBtn">
-                        <i class="fas fa-trash"></i>
-                        Clear Cart
-                    </button>
-                </div>
-            </div>
-
-            <!-- Empty Cart State -->
-            <div class="empty-cart" id="emptyCart">
-                <div class="empty-cart-content">
-                    <i class="fas fa-shopping-cart"></i>
-                    <h3>Your cart is empty</h3>
-                    <p>Browse our games and add some to your cart!</p>
-                    <a href="{{ url('/games') }}" class="btn btn-primary">
-                        <i class="fas fa-gamepad"></i>
-                        Browse Games
-                    </a>
-                </div>
-            </div>
-
-            <!-- Cart Items -->
-            <div class="cart-items" id="cartItems" style="display: none;">
-                <div class="cart-items-list" id="cartItemsList">
-                    <!-- Cart items will be loaded here -->
-                </div>
-
-                <!-- Cart Summary -->
-                <div class="cart-summary">
-                    <div class="summary-row">
-                        <span>Subtotal:</span>
-                        <span id="subtotal">Rp 0</span>
-                    </div>
-                    <div class="summary-row">
-                        <span>Tax (10%):</span>
-                        <span id="tax">Rp 0</span>
-                    </div>
-                    <div class="summary-row total">
-                        <span>Total:</span>
-                        <span id="total">Rp 0</span>
-                    </div>
-
-                    <button class="btn btn-primary checkout-btn" id="checkoutBtn">
-                        <i class="fas fa-credit-card"></i>
-                        Proceed to Checkout
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Featured Games -->
-        <div class="featured-games">
-            <div class="section-header">
-                <h2 class="section-title">Featured Games</h2>
-                <a href="{{ url('/games') }}" class="view-all">View All Games</a>
-            </div>
-
-            <div class="featured-grid" id="featuredGrid">
-                <!-- Featured games will be loaded here -->
-            </div>
-        </div>
-
-        <!-- Special Offers -->
-        <div class="special-offers">
-            <div class="section-header">
-                <h2 class="section-title">Special Offers</h2>
-            </div>
-
-            <div class="offers-grid" id="offersGrid">
-                <!-- Special offers will be loaded here -->
+    <!-- Games Grid -->
+    <div class="store-content">
+        <div class="games-section">
+            <h2>Available Games</h2>
+            <div class="games-grid" id="gamesGrid">
+                <div class="loading">Loading games...</div>
             </div>
         </div>
     </div>
@@ -98,25 +36,18 @@
     <div class="modal-content">
         <div class="modal-header">
             <h3>Checkout</h3>
-            <button class="modal-close" onclick="closeCheckoutModal()">&times;</button>
+            <button class="close" onclick="closeModal()">&times;</button>
         </div>
         <div class="modal-body">
-            <!-- Order Summary -->
-            <div class="checkout-summary">
-                <h4>Order Summary</h4>
-                <div class="order-items" id="orderItems">
-                    <!-- Order items will be loaded here -->
-                </div>
-                <div class="order-total">
-                    <div class="total-row">
-                        <span>Total:</span>
-                        <span id="orderTotal">Rp 0</span>
-                    </div>
-                </div>
+            <div id="checkoutItems">
+                <!-- Items will be loaded here -->
             </div>
-
+            <div class="total">
+                Total: <span id="modalTotal">Rp 0</span>
+            </div>
+            
             <!-- Payment Method -->
-            <div class="payment-method">
+            <div class="payment-section">
                 <h4>Payment Method</h4>
                 <div class="payment-options">
                     <label class="payment-option">
@@ -131,40 +62,12 @@
                         <i class="fas fa-university"></i>
                         <span>Bank Transfer</span>
                     </label>
-                    <label class="payment-option">
-                        <input type="radio" name="payment" value="ewallet">
-                        <span class="checkmark"></span>
-                        <i class="fas fa-mobile-alt"></i>
-                        <span>E-Wallet</span>
-                    </label>
-                </div>
-            </div>
-
-            <!-- Payment Details -->
-            <div class="payment-details">
-                <div class="form-group">
-                    <label for="cardNumber">Card Number</label>
-                    <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="expiryDate">Expiry Date</label>
-                        <input type="text" id="expiryDate" placeholder="MM/YY" maxlength="5">
-                    </div>
-                    <div class="form-group">
-                        <label for="cvv">CVV</label>
-                        <input type="text" id="cvv" placeholder="123" maxlength="3">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="cardName">Cardholder Name</label>
-                    <input type="text" id="cardName" placeholder="John Doe">
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-outline" onclick="closeCheckoutModal()">Cancel</button>
-            <button class="btn btn-primary" onclick="processPayment()">
+            <button class="btn" onclick="closeModal()">Cancel</button>
+            <button class="btn primary" onclick="processPayment()">
                 <i class="fas fa-lock"></i>
                 Pay Now
             </button>
@@ -172,346 +75,209 @@
     </div>
 </div>
 
+<!-- Success Modal -->
+<div class="modal" id="successModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Payment Successful!</h3>
+        </div>
+        <div class="modal-body">
+            <div style="text-align: center; padding: 20px;">
+                <i class="fas fa-check-circle" style="font-size: 3rem; color: #10b981; margin-bottom: 20px;"></i>
+                <h4>Thank you for your purchase!</h4>
+                <p>Your games have been added to your library.</p>
+                <div id="successDetails">
+                    <!-- Success details will be loaded here -->
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" onclick="closeSuccessModal()">Continue Shopping</button>
+            <a href="{{ url('/purchased') }}" class="btn primary">
+                <i class="fas fa-gamepad"></i>
+                View My Games
+            </a>
+        </div>
+    </div>
+</div>
+
 <style>
-.store-container {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
-}
-
-/* Hero Section */
-.store-hero {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
-    padding: 60px 32px;
-    text-align: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.hero-title {
-    font-size: 3rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, #60a5fa, #dbeafe);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 16px;
-}
-
-.hero-subtitle {
-    font-size: 1.2rem;
-    color: var(--text-gray);
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-/* Main Content */
-.store-main {
+.store-page {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 40px 32px;
+    padding: 30px 20px;
 }
 
-/* Cart Section */
-.cart-section {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--border-radius-lg);
-    padding: 32px;
-    margin-bottom: 40px;
-    backdrop-filter: blur(10px);
+.page-header {
+    margin-bottom: 30px;
 }
 
-.cart-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.cart-title {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--text-light);
-}
-
-/* Empty Cart */
-.empty-cart {
-    text-align: center;
-    padding: 60px 20px;
-}
-
-.empty-cart-content i {
-    font-size: 4rem;
-    color: var(--text-gray);
-    margin-bottom: 20px;
-}
-
-.empty-cart-content h3 {
-    font-size: 1.5rem;
-    color: var(--text-light);
-    margin-bottom: 12px;
-}
-
-.empty-cart-content p {
-    color: var(--text-gray);
-    margin-bottom: 24px;
-}
-
-/* Cart Items */
-.cart-items-list {
-    margin-bottom: 32px;
-}
-
-.cart-item {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--border-radius);
-    margin-bottom: 16px;
-    transition: var(--transition);
-}
-
-.cart-item:hover {
-    border-color: var(--soft-blue);
-    background: rgba(255, 255, 255, 0.08);
-}
-
-.cart-item-image {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: var(--border-radius);
-}
-
-.cart-item-details {
-    flex: 1;
-}
-
-.cart-item-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text-light);
-    margin-bottom: 4px;
-}
-
-.cart-item-developer {
-    color: var(--text-gray);
-    font-size: 0.9rem;
+.page-header h1 {
+    font-size: 2rem;
     margin-bottom: 8px;
-}
-
-.cart-item-price {
-    font-weight: 700;
-    color: var(--text-light);
-    font-size: 1.1rem;
-}
-
-.cart-item-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.quantity-controls {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: var(--border-radius);
-    padding: 8px 12px;
-}
-
-.quantity-btn {
-    background: none;
-    border: none;
-    color: var(--text-light);
-    cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 4px;
-    transition: var(--transition);
-}
-
-.quantity-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.quantity-value {
     font-weight: 600;
-    color: var(--text-light);
-    min-width: 30px;
-    text-align: center;
 }
 
-.remove-btn {
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    color: #fca5a5;
-    padding: 8px 12px;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: var(--transition);
-    font-size: 0.9rem;
-}
-
-.remove-btn:hover {
-    background: rgba(239, 68, 68, 0.2);
+.page-header p {
+    color: var(--text-secondary);
 }
 
 /* Cart Summary */
 .cart-summary {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--border-radius);
-    padding: 24px;
-}
-
-.summary-row {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 0;
-    color: var(--text-light);
 }
 
-.summary-row.total {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    margin-top: 12px;
-    padding-top: 16px;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--accent-blue);
-}
-
-.checkout-btn {
-    width: 100%;
-    margin-top: 20px;
-    padding: 16px;
-    font-size: 1.1rem;
-}
-
-/* Featured Games & Special Offers */
-.featured-games, .special-offers {
-    margin-bottom: 40px;
-}
-
-.section-header {
+.cart-info {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
+    gap: 15px;
 }
 
-.section-title {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--text-light);
+.cart-info i {
+    color: var(--accent);
 }
 
-.view-all {
-    color: var(--soft-blue);
-    text-decoration: none;
+#cartCount {
+    font-weight: 500;
+}
+
+#cartTotal {
     font-weight: 600;
-    transition: var(--transition);
+    color: var(--accent);
 }
 
-.view-all:hover {
-    color: var(--accent-blue);
+/* Games Section */
+.games-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-weight: 600;
 }
 
-.featured-grid, .offers-grid {
+.games-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
 }
 
-.store-game-card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--border-radius-lg);
+.game-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
     overflow: hidden;
     transition: var(--transition);
-    backdrop-filter: blur(10px);
 }
 
-.store-game-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--soft-blue);
-    box-shadow: var(--shadow);
+.game-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
 }
 
-.store-game-image {
+.game-image {
     width: 100%;
-    height: 160px;
+    height: 140px;
     object-fit: cover;
+    background: var(--border);
 }
 
-.store-game-content {
-    padding: 20px;
+.game-content {
+    padding: 15px;
 }
 
-.store-game-title {
-    font-size: 1.1rem;
+.game-title {
+    font-size: 16px;
     font-weight: 600;
-    color: var(--text-light);
-    margin-bottom: 8px;
+    margin-bottom: 5px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
 
-.store-game-developer {
-    color: var(--text-gray);
-    font-size: 0.9rem;
-    margin-bottom: 12px;
+.game-developer {
+    color: var(--text-secondary);
+    font-size: 13px;
+    margin-bottom: 10px;
 }
 
-.store-game-footer {
+.game-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
-.store-game-price {
-    font-weight: 700;
-    color: var(--text-light);
+.game-price {
+    font-weight: 600;
 }
 
-.store-game-price.free {
+.game-price.free {
     color: #10b981;
 }
 
-.store-game-rating {
+.game-rating {
     display: flex;
     align-items: center;
     gap: 4px;
     color: #fbbf24;
-    font-size: 0.9rem;
+    font-size: 13px;
 }
 
-.add-to-cart-btn {
+.add-to-cart {
     width: 100%;
-    padding: 10px;
-    background: var(--gradient-primary);
+    padding: 8px;
+    background: var(--accent);
     color: white;
     border: none;
-    border-radius: var(--border-radius);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: var(--transition);
+}
+
+.add-to-cart:hover {
+    opacity: 0.9;
+}
+
+.add-to-cart:disabled {
+    background: var(--text-secondary);
+    cursor: not-allowed;
+}
+
+/* Buttons */
+.btn {
+    padding: 10px 20px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: none;
+    color: var(--text-primary);
     cursor: pointer;
     transition: var(--transition);
-    font-weight: 600;
+    font-size: 14px;
 }
 
-.add-to-cart-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+.btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
 }
 
-/* Checkout Modal */
+.btn.primary:hover:not(:disabled) {
+    opacity: 0.9;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Modal */
 .modal {
     display: none;
     position: fixed;
@@ -520,8 +286,7 @@
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.8);
-    z-index: 10000;
-    backdrop-filter: blur(5px);
+    z-index: 1000;
 }
 
 .modal-content {
@@ -529,32 +294,30 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: var(--secondary-dark);
-    border-radius: var(--border-radius-lg);
+    background: var(--bg-secondary);
+    border-radius: 8px;
     width: 90%;
-    max-width: 500px;
-    max-height: 90vh;
-    overflow-y: auto;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 400px;
+    border: 1px solid var(--border);
 }
 
 .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
 }
 
 .modal-header h3 {
-    color: var(--text-light);
     margin: 0;
+    font-size: 1.2rem;
 }
 
-.modal-close {
+.close {
     background: none;
     border: none;
-    color: var(--text-gray);
+    color: var(--text-secondary);
     font-size: 1.5rem;
     cursor: pointer;
     padding: 0;
@@ -565,65 +328,95 @@
     justify-content: center;
 }
 
-.modal-close:hover {
-    color: var(--text-light);
+.close:hover {
+    color: var(--text-primary);
 }
 
 .modal-body {
-    padding: 24px;
+    padding: 20px;
 }
 
-.checkout-summary {
-    margin-bottom: 24px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.checkout-summary h4 {
-    color: var(--text-light);
-    margin-bottom: 16px;
-}
-
-.order-item {
+.checkout-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 0;
-    color: var(--text-light);
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
 }
 
-.order-item:not(:last-child) {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+.checkout-item:last-child {
+    border-bottom: none;
 }
 
-.order-total {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.total-row {
+.total {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--accent-blue);
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border);
+    font-weight: 600;
+    font-size: 1.1rem;
 }
 
-.payment-method {
-    margin-bottom: 24px;
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 20px;
+    border-top: 1px solid var(--border);
 }
 
-.payment-method h4 {
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-secondary);
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 768px) {
+    .store-page {
+        padding: 20px 16px;
+    }
+    
+    .games-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+    }
+    
+    .cart-summary {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .games-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 20px;
+    }
+}
+
+.payment-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+
+.payment-section h4 {
+    margin-bottom: 15px;
     color: var(--text-light);
-    margin-bottom: 16px;
 }
 
 .payment-options {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
 }
 
 .payment-option {
@@ -632,15 +425,14 @@
     gap: 12px;
     padding: 12px 16px;
     background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--border-radius);
+    border: 1px solid var(--border);
+    border-radius: 6px;
     cursor: pointer;
     transition: var(--transition);
 }
 
 .payment-option:hover {
-    border-color: var(--soft-blue);
-    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--accent);
 }
 
 .payment-option input {
@@ -653,12 +445,10 @@
     border: 2px solid var(--text-gray);
     border-radius: 50%;
     position: relative;
-    transition: var(--transition);
 }
 
 .payment-option input:checked + .checkmark {
-    border-color: var(--accent-blue);
-    background: var(--accent-blue);
+    border-color: var(--accent);
 }
 
 .payment-option input:checked + .checkmark::after {
@@ -669,413 +459,248 @@
     transform: translate(-50%, -50%);
     width: 8px;
     height: 8px;
-    background: white;
+    background: var(--accent);
     border-radius: 50%;
 }
 
 .payment-option i {
-    color: var(--soft-blue);
+    color: var(--accent);
     width: 20px;
-    text-align: center;
-}
-
-.payment-details {
-    margin-top: 20px;
-}
-
-.form-group {
-    margin-bottom: 16px;
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    color: var(--text-light);
-    font-weight: 500;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 12px 16px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: var(--border-radius);
-    color: var(--text-light);
-    font-size: 1rem;
-    transition: var(--transition);
-}
-
-.form-group input:focus {
-    outline: none;
-    border-color: var(--accent-blue);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.form-group input::placeholder {
-    color: var(--text-gray);
-}
-
-.modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    padding: 24px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .store-main {
-        padding: 20px;
-    }
-    
-    .cart-section {
-        padding: 24px 20px;
-    }
-    
-    .cart-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
-    }
-    
-    .cart-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
-    }
-    
-    .cart-item-actions {
-        width: 100%;
-        justify-content: space-between;
-    }
-    
-    .featured-grid, .offers-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 20px;
-    }
-    
-    .form-row {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 480px) {
-    .store-hero {
-        padding: 40px 20px;
-    }
-    
-    .hero-title {
-        font-size: 2.5rem;
-    }
-    
-    .featured-grid, .offers-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .modal-content {
-        width: 95%;
-        margin: 20px;
-    }
 }
 </style>
 
 <script>
-// Cart functionality
 let cart = JSON.parse(localStorage.getItem('gamehaven_cart')) || [];
 
 document.addEventListener('DOMContentLoaded', function() {
-    loadCart();
-    loadFeaturedGames();
-    loadSpecialOffers();
+    loadGames();
+    updateCartSummary();
 
-    // Event listeners
-    document.getElementById('clearCartBtn').addEventListener('click', clearCart);
     document.getElementById('checkoutBtn').addEventListener('click', openCheckoutModal);
 });
 
-function loadCart() {
-    const emptyCart = document.getElementById('emptyCart');
-    const cartItems = document.getElementById('cartItems');
-    const cartItemsList = document.getElementById('cartItemsList');
+async function loadGames() {
+    try {
+        const response = await fetch('/api/public/games?per_page=12');
+        const data = await response.json();
+        const games = data.data || data;
 
-    if (cart.length === 0) {
-        emptyCart.style.display = 'block';
-        cartItems.style.display = 'none';
-        return;
-    }
+        const container = document.getElementById('gamesGrid');
+        
+        if (games.length === 0) {
+            container.innerHTML = '<div class="loading">No games available</div>';
+            return;
+        }
 
-    emptyCart.style.display = 'none';
-    cartItems.style.display = 'block';
-
-    // Render cart items
-    cartItemsList.innerHTML = cart.map(item => `
-        <div class="cart-item" data-game-id="${item.id}">
-            <img src="${item.image_url || getPlaceholderImage()}" 
-                 alt="${item.title}" 
-                 class="cart-item-image"
-                 onerror="this.src='${getPlaceholderImage()}'">
-            <div class="cart-item-details">
-                <h3 class="cart-item-title">${item.title}</h3>
-                <p class="cart-item-developer">${item.developer}</p>
-                <div class="cart-item-price">${formatCurrency(item.price)}</div>
-            </div>
-            <div class="cart-item-actions">
-                <div class="quantity-controls">
-                    <button class="quantity-btn" onclick="decreaseQuantity(${item.id})">
-                        <i class="fas fa-minus"></i>
-                    </button>
-                    <span class="quantity-value">${item.quantity}</span>
-                    <button class="quantity-btn" onclick="increaseQuantity(${item.id})">
-                        <i class="fas fa-plus"></i>
-                    </button>
+        const gamesHTML = games.map(game => {
+            const isInCart = cart.some(item => item.id === game.id);
+            const isOutOfStock = game.stock === 0;
+            
+            return `
+                <div class="game-card">
+                    <img src="${game.image_url || getPlaceholderImage()}" 
+                         alt="${game.title}" 
+                         class="game-image"
+                         onerror="this.src='${getPlaceholderImage()}'">
+                    <div class="game-content">
+                        <div class="game-title">${game.title}</div>
+                        <div class="game-developer">${game.developer}</div>
+                        <div class="game-footer">
+                            <div class="game-price ${game.price === 0 ? 'free' : ''}">
+                                ${game.price === 0 ? 'FREE' : formatCurrency(game.price)}
+                            </div>
+                            ${game.rating ? `
+                                <div class="game-rating">
+                                    <i class="fas fa-star"></i>
+                                    ${game.rating.toFixed(1)}
+                                </div>
+                            ` : ''}
+                        </div>
+                        ${isOutOfStock ? 
+                            `<button class="add-to-cart" disabled>Out of Stock</button>` :
+                            `<button class="add-to-cart" 
+                                onclick="addToCart(${JSON.stringify(game).replace(/"/g, '&quot;')})"
+                                ${isInCart ? 'disabled' : ''}>
+                                ${isInCart ? 'In Cart' : 'Add to Cart'}
+                            </button>`
+                        }
+                        ${isOutOfStock ? `<div style="color: #ef4444; font-size: 12px; text-align: center; margin-top: 5px;">Out of stock</div>` : ''}
+                    </div>
                 </div>
-                <button class="remove-btn" onclick="removeFromCart(${item.id})">
-                    <i class="fas fa-trash"></i>
-                    Remove
-                </button>
-            </div>
-        </div>
-    `).join('');
+            `;
+        }).join('');
 
-    updateCartSummary();
-}
-
-function updateCartSummary() {
-    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const tax = subtotal * 0.1; // 10% tax
-    const total = subtotal + tax;
-
-    document.getElementById('subtotal').textContent = formatCurrency(subtotal);
-    document.getElementById('tax').textContent = formatCurrency(tax);
-    document.getElementById('total').textContent = formatCurrency(total);
+        container.innerHTML = gamesHTML;
+    } catch (error) {
+        console.error('Error loading games:', error);
+        document.getElementById('gamesGrid').innerHTML = '<div class="loading">Error loading games</div>';
+    }
 }
 
 function addToCart(game) {
     const existingItem = cart.find(item => item.id === game.id);
     
-    if (existingItem) {
-        existingItem.quantity += 1;
-    } else {
+    if (!existingItem) {
         cart.push({
-            ...game,
+            id: game.id,
+            title: game.title,
+            price: game.price,
+            image_url: game.image_url,
+            developer: game.developer,
             quantity: 1
         });
-    }
-
-    saveCart();
-    loadCart();
-    showNotification(`${game.title} added to cart!`, 'success');
-}
-
-function removeFromCart(gameId) {
-    cart = cart.filter(item => item.id !== gameId);
-    saveCart();
-    loadCart();
-    showNotification('Item removed from cart', 'info');
-}
-
-function increaseQuantity(gameId) {
-    const item = cart.find(item => item.id === gameId);
-    if (item) {
-        item.quantity += 1;
+        
         saveCart();
-        loadCart();
+        updateCartSummary();
+        loadGames(); // Reload to update button states
+        showNotification(`${game.title} added to cart`);
     }
 }
 
-function decreaseQuantity(gameId) {
-    const item = cart.find(item => item.id === gameId);
-    if (item && item.quantity > 1) {
-        item.quantity -= 1;
-        saveCart();
-        loadCart();
-    } else {
-        removeFromCart(gameId);
-    }
+function updateCartSummary() {
+    const itemCount = cart.reduce((total, item) => total + item.quantity, 0);
+    const totalAmount = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    
+    document.getElementById('cartCount').textContent = `${itemCount} ${itemCount === 1 ? 'item' : 'items'}`;
+    document.getElementById('cartTotal').textContent = formatCurrency(totalAmount);
+    
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    checkoutBtn.disabled = itemCount === 0;
 }
 
-function clearCart() {
+function openCheckoutModal() {
     if (cart.length === 0) return;
     
-    if (confirm('Are you sure you want to clear your cart?')) {
+    const itemsHTML = cart.map(item => `
+        <div class="checkout-item">
+            <span>${item.title}</span>
+            <span>${formatCurrency(item.price * item.quantity)}</span>
+        </div>
+    `).join('');
+    
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    
+    document.getElementById('checkoutItems').innerHTML = itemsHTML;
+    document.getElementById('modalTotal').textContent = formatCurrency(total);
+    document.getElementById('checkoutModal').style.display = 'block';
+}
+
+function closeModal() {
+    document.getElementById('checkoutModal').style.display = 'none';
+}
+
+function closeSuccessModal() {
+    document.getElementById('successModal').style.display = 'none';
+    // Redirect to store page
+    window.location.href = '/store';
+}
+
+async function processPayment() {
+    if (cart.length === 0) return;
+    
+    const checkoutBtn = document.querySelector('#checkoutModal .btn.primary');
+    checkoutBtn.disabled = true;
+    checkoutBtn.innerHTML = '<i class="fas fa-sync fa-spin"></i> Processing...';
+    
+    try {
+        // Prepare transaction data
+        const transactionData = {
+            user_id: {{ Session::get('user_id') }},
+            games: cart.map(item => ({
+                id: item.id,
+                qty: item.quantity
+            }))
+        };
+        
+        console.log('Sending transaction data:', transactionData);
+        
+        // Send transaction to backend
+        const response = await fetch('/api/transactions/checkout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify(transactionData)
+        });
+        
+        const result = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(result.error || 'Payment failed');
+        }
+        
+        if (!result.success) {
+            throw new Error(result.error || 'Payment failed');
+        }
+        
+        // Show success modal
+        showSuccessModal(result.transaction, cart);
+        
+        // Clear cart
         cart = [];
         saveCart();
-        loadCart();
-        showNotification('Cart cleared', 'info');
+        updateCartSummary();
+        loadGames(); // Reload games to update stock
+        
+    } catch (error) {
+        console.error('Payment error:', error);
+        showNotification(error.message || 'Payment failed. Please try again.', 'error');
+        checkoutBtn.disabled = false;
+        checkoutBtn.innerHTML = '<i class="fas fa-lock"></i> Pay Now';
     }
+}
+
+function showSuccessModal(transaction, purchasedGames) {
+    const successDetails = document.getElementById('successDetails');
+    
+    const detailsHTML = `
+        <div style="text-align: left; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 6px; margin: 15px 0;">
+            <div><strong>Transaction ID:</strong> #${transaction.id}</div>
+            <div><strong>Total Paid:</strong> ${formatCurrency(transaction.total_price)}</div>
+            <div><strong>Date:</strong> ${new Date(transaction.date).toLocaleDateString()}</div>
+            <div><strong>Games Purchased:</strong></div>
+            <ul style="margin: 10px 0; padding-left: 20px;">
+                ${purchasedGames.map(game => `<li>${game.title}</li>`).join('')}
+            </ul>
+        </div>
+    `;
+    
+    successDetails.innerHTML = detailsHTML;
+    document.getElementById('checkoutModal').style.display = 'none';
+    document.getElementById('successModal').style.display = 'block';
+}
+
+function showSuccessModal(transaction, purchasedGames) {
+    const successDetails = document.getElementById('successDetails');
+    
+    const detailsHTML = `
+        <div style="text-align: left; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 6px; margin: 15px 0;">
+            <div><strong>Transaction ID:</strong> #${transaction.id}</div>
+            <div><strong>Total Paid:</strong> ${formatCurrency(transaction.total_price)}</div>
+            <div><strong>Games Purchased:</strong></div>
+            <ul style="margin: 10px 0; padding-left: 20px;">
+                ${purchasedGames.map(game => `<li>${game.title}</li>`).join('')}
+            </ul>
+        </div>
+    `;
+    
+    successDetails.innerHTML = detailsHTML;
+    document.getElementById('checkoutModal').style.display = 'none';
+    document.getElementById('successModal').style.display = 'block';
 }
 
 function saveCart() {
     localStorage.setItem('gamehaven_cart', JSON.stringify(cart));
 }
 
-async function loadFeaturedGames() {
-    try {
-        const response = await fetch('/api/public/games?per_page=4');
-        const data = await response.json();
-        const games = data.data || data;
-
-        const container = document.getElementById('featuredGrid');
-        
-        if (games.length === 0) {
-            container.innerHTML = '<p class="no-games">No featured games available</p>';
-            return;
-        }
-
-        const gamesHTML = games.map(game => `
-            <div class="store-game-card">
-                <img src="${game.image_url || getPlaceholderImage()}" 
-                     alt="${game.title}" 
-                     class="store-game-image"
-                     onerror="this.src='${getPlaceholderImage()}'">
-                <div class="store-game-content">
-                    <h3 class="store-game-title">${game.title}</h3>
-                    <p class="store-game-developer">${game.developer}</p>
-                    <div class="store-game-footer">
-                        <div class="store-game-price ${game.price === 0 ? 'free' : ''}">
-                            ${game.price === 0 ? 'FREE' : formatCurrency(game.price)}
-                        </div>
-                        ${game.rating ? `
-                            <div class="store-game-rating">
-                                <i class="fas fa-star"></i>
-                                ${game.rating.toFixed(1)}
-                            </div>
-                        ` : ''}
-                    </div>
-                    <button class="add-to-cart-btn" onclick="addToCart(${JSON.stringify(game).replace(/"/g, '&quot;')})">
-                        <i class="fas fa-cart-plus"></i>
-                        Add to Cart
-                    </button>
-                </div>
-            </div>
-        `).join('');
-
-        container.innerHTML = gamesHTML;
-    } catch (error) {
-        console.error('Error loading featured games:', error);
-        document.getElementById('featuredGrid').innerHTML = '<p class="no-games">Error loading featured games</p>';
-    }
-}
-
-async function loadSpecialOffers() {
-    try {
-        const response = await fetch('/api/public/games?price=under100&per_page=4');
-        const data = await response.json();
-        const games = data.data || data;
-
-        const container = document.getElementById('offersGrid');
-        
-        if (games.length === 0) {
-            container.innerHTML = '<p class="no-games">No special offers available</p>';
-            return;
-        }
-
-        const gamesHTML = games.map(game => `
-            <div class="store-game-card">
-                <img src="${game.image_url || getPlaceholderImage()}" 
-                     alt="${game.title}" 
-                     class="store-game-image"
-                     onerror="this.src='${getPlaceholderImage()}'">
-                <div class="store-game-content">
-                    <h3 class="store-game-title">${game.title}</h3>
-                    <p class="store-game-developer">${game.developer}</p>
-                    <div class="store-game-footer">
-                        <div class="store-game-price ${game.price === 0 ? 'free' : ''}">
-                            ${game.price === 0 ? 'FREE' : formatCurrency(game.price)}
-                        </div>
-                        ${game.rating ? `
-                            <div class="store-game-rating">
-                                <i class="fas fa-star"></i>
-                                ${game.rating.toFixed(1)}
-                            </div>
-                        ` : ''}
-                    </div>
-                    <button class="add-to-cart-btn" onclick="addToCart(${JSON.stringify(game).replace(/"/g, '&quot;')})">
-                        <i class="fas fa-cart-plus"></i>
-                        Add to Cart
-                    </button>
-                </div>
-            </div>
-        `).join('');
-
-        container.innerHTML = gamesHTML;
-    } catch (error) {
-        console.error('Error loading special offers:', error);
-        document.getElementById('offersGrid').innerHTML = '<p class="no-games">Error loading special offers</p>';
-    }
-}
-
-function openCheckoutModal() {
-    if (cart.length === 0) {
-        showNotification('Your cart is empty', 'error');
-        return;
-    }
-
-    const orderItems = document.getElementById('orderItems');
-    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 1.1;
-
-    orderItems.innerHTML = cart.map(item => `
-        <div class="order-item">
-            <span>${item.title} × ${item.quantity}</span>
-            <span>${formatCurrency(item.price * item.quantity)}</span>
-        </div>
-    `).join('');
-
-    document.getElementById('orderTotal').textContent = formatCurrency(total);
-    document.getElementById('checkoutModal').style.display = 'block';
-}
-
-function closeCheckoutModal() {
-    document.getElementById('checkoutModal').style.display = 'none';
-}
-
-function processPayment() {
-    // Validate form
-    const cardNumber = document.getElementById('cardNumber').value;
-    const expiryDate = document.getElementById('expiryDate').value;
-    const cvv = document.getElementById('cvv').value;
-    const cardName = document.getElementById('cardName').value;
-
-    if (!cardNumber || !expiryDate || !cvv || !cardName) {
-        showNotification('Please fill in all payment details', 'error');
-        return;
-    }
-
-    // Simulate payment processing
-    showNotification('Processing payment...', 'info');
-    
-    setTimeout(() => {
-        showNotification('Payment successful! Your games are being processed.', 'success');
-        closeCheckoutModal();
-        
-        // Clear cart after successful payment
-        cart = [];
-        saveCart();
-        loadCart();
-        
-        // In real app, you would redirect to order confirmation page
-    }, 2000);
-}
-
-// Utility functions
 function formatCurrency(amount) {
     if (!amount) return 'Free';
-    return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 0
-    }).format(amount);
+    return 'Rp ' + amount.toLocaleString('id-ID');
 }
 
 function getPlaceholderImage() {
-    return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgwIiBoZWlnaHQ9IjE2MCIgdmlld0JveD0iMCAwIDI4MCAxNjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyODAiIGhlaWdodD0iMTYwIiBmaWxsPSJ1cmwoI2dyYWRpZW50KSIvPgo8dGV4dCB4PSIxNDAiIHk9IjgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0Ij5HYW1lIEltYWdlPC90ZXh0Pgo8ZGVmcz4KPGxpbmVhckdyYWRpZW50IGlkPSJncmFkaWVudCIgeDE9IjAiIHkxPSIwIiB4Mj0iMjgwIiB5Mj0iMTYwIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzFmMjkzYiIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwZjE3MmEiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4=';
+    return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUwIiBoZWlnaHQ9IjE0MCIgdmlld0JveD0iMCAwIDI1MCAxNDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyNTAiIGhlaWdodD0iMTQwIiBmaWxsPSIjMTExMTExIi8+Cjx0ZXh0IHg9IjEyNSIgeT0iNzAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzMzMzMzMiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiI+R2FtZSBJbWFnZTwvdGV4dD4KPC9zdmc+';
 }
 
 function showNotification(message, type = 'info') {
@@ -1084,65 +709,19 @@ function showNotification(message, type = 'info') {
         position: fixed;
         top: 20px;
         right: 20px;
-        background: ${type === 'success' ? 'linear-gradient(135deg, #10b981, #059669)' : 
-                      type === 'error' ? 'linear-gradient(135deg, #ef4444, #dc2626)' : 
-                      'linear-gradient(135deg, #3b82f6, #1d4ed8)'};
+        background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
         color: white;
-        padding: 16px 24px;
-        border-radius: var(--border-radius);
-        box-shadow: var(--shadow);
-        z-index: 10000;
-        animation: slideIn 0.3s ease;
-        max-width: 300px;
+        padding: 12px 20px;
+        border-radius: 6px;
+        z-index: 1000;
+        font-size: 14px;
     `;
-    notification.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 8px;">
-            <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-triangle' : 'info'}"></i>
-            <span>${message}</span>
-        </div>
-    `;
+    notification.textContent = message;
     document.body.appendChild(notification);
     
     setTimeout(() => {
-        notification.style.animation = 'slideOut 0.3s ease';
-        setTimeout(() => {
-            notification.remove();
-        }, 300);
+        notification.remove();
     }, 3000);
 }
-
-// Add CSS animations
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideIn {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-    
-    @keyframes slideOut {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-    }
-    
-    .no-games {
-        text-align: center;
-        color: var(--text-gray);
-        padding: 40px;
-        grid-column: 1 / -1;
-    }
-`;
-document.head.appendChild(style);
 </script>
 @endsection

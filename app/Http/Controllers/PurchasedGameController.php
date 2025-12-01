@@ -9,8 +9,12 @@ class PurchasedGameController extends Controller
 {
     public function index($userId)
     {
-        $purchased = PurchasedGame::with('game')->where('user_id', $userId)->get();
-        return response()->json($purchased);
+        $purchasedGames = PurchasedGame::with('game')
+            ->where('user_id', $userId)
+            ->orderBy('purchase_date', 'desc')
+            ->get();
+            
+        return response()->json($purchasedGames);
     }
 
     public function updateStatus(Request $request, $id)
@@ -23,5 +27,16 @@ class PurchasedGameController extends Controller
         $purchase->update(['download_status' => $data['download_status']]);
 
         return response()->json($purchase);
+    }
+
+    // Method baru untuk mendapatkan purchased game by game_id dan user_id
+    public function getByGameAndUser($userId, $gameId)
+    {
+        $purchasedGame = PurchasedGame::with('game')
+            ->where('user_id', $userId)
+            ->where('game_id', $gameId)
+            ->firstOrFail();
+            
+        return response()->json($purchasedGame);
     }
 }

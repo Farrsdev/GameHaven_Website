@@ -3,7 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DownloadHistoryController;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\PurchasedGameController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 
 // =====================
@@ -98,36 +101,51 @@ Route::prefix('api')->middleware(['auth.session', 'admin'])->group(function () {
 Route::middleware(['auth.session'])->group(function () {
     Route::get('/home', [UserController::class, 'home'])->name('home');
     Route::get('/api/home-data', [UserController::class, 'homeData']);
-    
+
     Route::get('/games', function () {
         return view('user.games');
     });
-    
+
     // Tambahkan route untuk game detail
     Route::get('/games/{id}', [GameController::class, 'showDetail'])->name('game.detail');
-    
+
     Route::get('/store', function () {
         return view('user.store');
     });
-    
+
     Route::get('/purchased', function () {
         return view('user.purchased');
     });
-    
+
     Route::get('/downloads', function () {
         return view('user.downloads');
     });
-    
+
     Route::get('/profile', function () {
         return view('user.profile');
     });
+
 
     // Protected user APIs
     Route::prefix('api')->group(function () {
         Route::get('/user/games', [GameController::class, 'index']);
         Route::get('/user/games/{id}', [GameController::class, 'show']);
+        Route::get('/users/{id}', [UserController::class, 'show']);
+        Route::put('/users/{id}', [UserController::class, 'update']);
+        Route::delete('/users/{id}', [UserController::class, 'destroy']);
         // Route untuk purchase game
         Route::post('/user/games/{id}/purchase', [GameController::class, 'purchase']);
+        Route::post('/transactions/checkout', [TransactionController::class, 'checkout']);
+        Route::get('/transactions/history/{userId}', [TransactionController::class, 'history']);
+
+        Route::get('/user/{userId}/purchased-games', [PurchasedGameController::class, 'index']);
+        Route::put('/purchased-games/{id}/status', [PurchasedGameController::class, 'updateStatus']);
+
+        Route::post('/downloads/{gameId}', [DownloadHistoryController::class, 'downloadGame']);
+        Route::get('/downloads/history/{userId}', [DownloadHistoryController::class, 'index']);
+
+        Route::get('/user/profile', [UserController::class, 'getProfile']);
+        Route::put('/user/profile', [UserController::class, 'updateProfile']);
     });
 });
 // Redirect root
